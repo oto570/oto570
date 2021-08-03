@@ -1,0 +1,198 @@
+@charset "utf-8";
+
+
+/*全端末共通設定
+------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*全体の設定
+---------------------------------------------------------------------------*/
+body {
+    margin: 0px;
+    padding: 0px;
+    color: #696874;
+    font-family: "ヒラギノ角ゴ Pro W3";
+    font-size: 14px;
+    line-height: 2;
+    background: #fff url(../images/haikei.gif) fixed;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+li,
+figure,
+    {
+    margin: 0px;
+    padding: 0px;
+    font-size: 100%;
+}
+
+ul {
+    list-style-type: none;
+}
+
+
+img {
+    border: none;
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+    font-size: 100%;
+    border-spacing: 0;
+}
+
+iframe {
+    width: 100%;
+}
+
+
+#container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 50px auto 0px;
+}
+
+.heimage {
+    float: right;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.p2 {
+    margin-top: 100px;
+}
+
+
+#menubar li {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#menubar a {
+    border: 2px solid #696874;
+    border-radius: 10px;
+    display: block;
+    text-decoration: none;
+    padding: 10px 0px;
+    color: #171619;
+}
+
+#menubar a:hover {
+    background: #fff;
+}
+
+
+
+#main {
+    float: right;
+    width: 75%;
+}
+
+#main h2 {
+    clear: both;
+    margin-bottom: 20px;
+    font-size: 100%;
+    color: #FFF;
+    background: #656563;
+    padding: 5px 15px;
+    border-radius: 7px;
+}
+
+
+
+#main p {
+    padding: 0px 15px 10px;
+
+}
+
+
+#main section.list {
+    float: left;
+    width: 30%;
+    margin: 0 0 15px 1.5%;
+    font-size: 13px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+
+}
+
+#main section.list a {
+    padding: 9%;
+    border-radius: 10px;
+    text-decoration: none;
+    display: block;
+    overflow: hidden;
+    background: #fff;
+    color: #333;
+    opacity: 0.8;
+
+}
+
+
+#main section.list p {
+    padding: 0px;
+}
+
+
+#main section.list h4 {
+    color: #777684;
+}
+
+#sub {
+    float: left;
+    position: fixed;
+    width: 30%;
+    max-width: 308px;
+}
+
+
+#sub #logo {
+    margin-bottom: 20px;
+}
+
+
+.box {
+    padding: 3%;
+    margin-bottom: 30px !important;
+    background: #fff;
+    overflow: hidden;
+    word-break: break-all;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    color: #333;
+}
+
+
+
+
+.ta1 {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.ta1,
+.ta1 td,
+.ta1 th {
+    border: 1px solid #4a494d;
+
+}
+
+
+
+.ta1 th {
+    width: 300px;
+    padding: 10px;
+    text-align: center;
+}
+
+
+.ta1 td {
+    padding: 10px;
+}
