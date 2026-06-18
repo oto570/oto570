@@ -2,7 +2,8 @@ name: Deploy Cohabitation Simulator to GitHub Pages
 
 on:
   push:
-    branches: ["claude/cohabitation-finance-simulator-oij7we"]
+    branches: ["main"]
+    paths: ["cohabitation-simulator/**"]
   workflow_dispatch:
 
 permissions:
