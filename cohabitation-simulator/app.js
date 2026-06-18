@@ -355,6 +355,68 @@ function update() {
   renderNotes(inputs, result);
 }
 
+const CHART_KEY_BY_CANVAS = {
+  chartBalance: "balance",
+  chartContribution: "contribution",
+  chartInitialCost: "initial",
+  chartSavings: "savings",
+};
+
+function setupChartTabs() {
+  const tabs = document.querySelectorAll("#chartTabs .tab");
+  const slides = document.querySelectorAll(".chart-slide");
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.target;
+      tabs.forEach(t => t.classList.toggle("active", t === tab));
+      slides.forEach(s => s.classList.toggle("active", s.dataset.slide === target));
+      const chartKey = CHART_KEY_BY_CANVAS[target];
+      if (charts[chartKey]) charts[chartKey].resize();
+    });
+  });
+}
+
+function setupSettingsOverlay() {
+  const overlay = document.getElementById("settingsOverlay");
+  const openBtn = document.getElementById("openSettingsBtn");
+  const closeBtn = document.getElementById("closeSettingsBtn");
+  const scrim = document.getElementById("settingsScrim");
+
+  const open = () => {
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("settings-open");
+  };
+  const close = () => {
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("settings-open");
+  };
+
+  openBtn.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  scrim.addEventListener("click", close);
+
+  const tabs = document.querySelectorAll("#settingsTabs .tab");
+  const sections = document.querySelectorAll(".settings-section");
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.panel;
+      tabs.forEach(t => t.classList.toggle("active", t === tab));
+      sections.forEach(s => s.classList.toggle("active", s.id === target));
+    });
+  });
+}
+
+function setupNotesToggle() {
+  const toggle = document.getElementById("notesToggle");
+  const body = document.getElementById("notesBody");
+  toggle.addEventListener("click", () => {
+    const isOpen = body.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("input").forEach(el => {
     el.addEventListener("input", () => {
@@ -367,5 +429,8 @@ document.addEventListener("DOMContentLoaded", () => {
       update();
     });
   });
+  setupChartTabs();
+  setupSettingsOverlay();
+  setupNotesToggle();
   update();
 });

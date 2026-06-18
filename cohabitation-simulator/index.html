@@ -8,157 +8,185 @@
 </head>
 <body>
 
-<header class="page-header">
-  <h1>同棲生活費シミュレーター</h1>
-  <p>入居予定: 2026年8月 ／ 契約期間: 2年間(〜2028年7月) ／ 数値を変更するとグラフ・結果が自動で更新されます</p>
+<header class="app-bar">
+  <div class="app-bar-title">
+    <h1>同棲生活費シミュレーター</h1>
+    <p>入居予定: 2026年8月 ／ 契約期間: 2年間(〜2028年7月)</p>
+  </div>
+  <button type="button" id="openSettingsBtn" class="icon-btn">
+    <span class="gear">⚙</span> 設定
+  </button>
 </header>
 
 <main class="container">
 
-  <section class="panel">
-    <h2>1. 収入</h2>
-    <div class="grid grid-2">
-      <label>あなたの手取り月給(円)
-        <input type="number" id="userSalary" value="350000" step="1000">
-      </label>
-      <label>彼女の手取り月給(円)
-        <input type="number" id="partnerSalary" value="260000" step="1000">
-      </label>
-      <label>あなたのボーナス(1回あたり・円)
-        <input type="number" id="userBonus" value="1000000" step="10000">
-      </label>
-      <label>彼女のボーナス(1回あたり・円)
-        <input type="number" id="partnerBonus" value="1000000" step="10000">
-      </label>
+  <div id="warningBox" class="warning" style="display:none;"></div>
+
+  <section class="cards" id="summaryCards"></section>
+
+  <section class="panel chart-panel">
+    <div class="tabbar" id="chartTabs">
+      <button type="button" class="tab active" data-target="chartBalance">共通口座残高</button>
+      <button type="button" class="tab" data-target="chartContribution">毎月の振込額</button>
+      <button type="button" class="tab" data-target="chartInitialCost">初期費用の内訳</button>
+      <button type="button" class="tab" data-target="chartSavings">資産形成</button>
     </div>
-    <p class="hint">ボーナスは毎年6月・12月の年2回支給という前提です。</p>
-  </section>
-
-  <section class="panel">
-    <h2>2. 住居・初期費用</h2>
-    <div class="grid grid-2">
-      <label>家賃(円/月)
-        <input type="number" id="rent" value="240000" step="1000">
-      </label>
-      <label>家賃補助(円/月・あなたの会社から)
-        <input type="number" id="rentSubsidy" value="60000" step="1000">
-      </label>
-      <label>敷金
-        <input type="number" id="deposit" value="240000" step="1000">
-      </label>
-      <label>礼金
-        <input type="number" id="keyMoney" value="240000" step="1000">
-      </label>
-      <label>初回保証料
-        <input type="number" id="guaranteeFee" value="88400" step="100">
-      </label>
-      <label>火災保険(2年分)
-        <input type="number" id="fireInsurance" value="18000" step="100">
-      </label>
-      <label>鍵交換費
-        <input type="number" id="keyExchange" value="22000" step="100">
-      </label>
-      <label>ハウスクリーニング代
-        <input type="number" id="cleaningFee" value="51480" step="100">
-      </label>
-      <label>エアコン清掃費
-        <input type="number" id="acCleaningFee" value="13200" step="100">
-      </label>
-      <label>仲介手数料(家賃1ヶ月分+税の目安)
-        <input type="number" id="agencyFee" value="264000" step="1000">
-      </label>
-      <label>家具・家電・引っ越し費用
-        <input type="number" id="furnitureMoveCost" value="350000" step="10000">
-      </label>
+    <div class="chart-stage">
+      <div class="chart-slide active" data-slide="chartBalance">
+        <canvas id="chartBalance" height="280"></canvas>
+      </div>
+      <div class="chart-slide" data-slide="chartContribution">
+        <canvas id="chartContribution" height="280"></canvas>
+      </div>
+      <div class="chart-slide" data-slide="chartInitialCost">
+        <canvas id="chartInitialCost" height="280"></canvas>
+      </div>
+      <div class="chart-slide" data-slide="chartSavings">
+        <p class="hint">「個人残余資金」は手取り給与・ボーナスから共通口座への振込額を引いた金額の累積です。通信費・保険・娯楽費など個人費用は未反映のため、実際の貯蓄額はこれより少なくなります。</p>
+        <canvas id="chartSavings" height="280"></canvas>
+      </div>
     </div>
-    <p class="hint">敷金・礼金等は契約書ベースのご提供値、仲介手数料・家具家電費は目安です。家賃補助を差し引いた額が「共通負担額」として分担対象になります。</p>
-  </section>
-
-  <section class="panel">
-    <h2>3. 毎月の共通生活費(固定費＋食費・日用品)</h2>
-    <div class="grid grid-2">
-      <label>電気代(基準値・円/月)
-        <input type="number" id="electricityBase" value="9000" step="500">
-      </label>
-      <label>ガス代(基準値・円/月)
-        <input type="number" id="gasBase" value="5500" step="500">
-      </label>
-      <label>水道代(平均・円/月)
-        <input type="number" id="waterBase" value="4500" step="500">
-      </label>
-      <label>食費(2人合計・円/月)
-        <input type="number" id="foodCost" value="60000" step="1000">
-      </label>
-      <label>日用品費(2人合計・円/月)
-        <input type="number" id="dailyNecessities" value="8000" step="500">
-      </label>
-      <label>駐車場代(任意・円/月)
-        <input type="number" id="parkingCost" value="0" step="1000">
-      </label>
-      <label>NHK受信料等その他固定費(任意・円/月)
-        <input type="number" id="nhkFee" value="0" step="500">
-      </label>
-    </div>
-    <p class="hint">インターネット無料の物件を前提に光熱費は季節変動(夏・冬は割高)を加味して計算しています。通信費(携帯)・保険・個人の娯楽費等は対象外(各自管理)です。</p>
-  </section>
-
-  <section class="panel">
-    <h2>4. 共通口座への分担方針</h2>
-    <div class="split-options">
-      <label class="radio"><input type="radio" name="splitMode" value="even" checked> 完全折半(50:50)</label>
-      <label class="radio"><input type="radio" name="splitMode" value="income"> 手取り給与比率で分担</label>
-      <label class="radio"><input type="radio" name="splitMode" value="custom"> カスタム比率</label>
-    </div>
-    <label class="slider-label">あなたの負担割合: <span id="customRatioLabel">55%</span>
-      <input type="range" id="customRatio" min="50" max="80" value="55" step="1">
-    </label>
-    <p class="hint" id="ratioResultText"></p>
-  </section>
-
-  <section class="panel">
-    <h2>5. 共通口座の最低バッファー方針</h2>
-    <label class="slider-label">最低バッファー(共通生活費の何ヶ月分を口座に残すか): <span id="bufferLabel">1.0ヶ月分</span>
-      <input type="range" id="bufferTargetMonths" min="0" max="3" value="1" step="0.5">
-    </label>
-    <label>ボーナス時(12月・翌年6月以降)の追加積立額(任意・1回あたり・2人合計の円)
-      <input type="number" id="extraBonusContribution" value="0" step="10000">
-    </label>
-    <p class="hint">2026年6月のボーナスは初期費用＋バッファー分の拠出に自動的に逆算され、それ以外のボーナス時は任意で追加積立できます(将来の旅行・結婚資金等に)。</p>
-  </section>
-
-  <section class="panel results">
-    <h2>シミュレーション結果</h2>
-    <div id="warningBox" class="warning" style="display:none;"></div>
-    <div class="cards" id="summaryCards"></div>
-  </section>
-
-  <section class="panel">
-    <h2>共通口座残高の推移(2026年6月〜2028年7月)</h2>
-    <canvas id="chartBalance" height="280"></canvas>
-  </section>
-
-  <section class="panel">
-    <h2>毎月の共通口座への振込額(2人分)</h2>
-    <canvas id="chartContribution" height="280"></canvas>
-  </section>
-
-  <section class="panel">
-    <h2>初期費用の内訳</h2>
-    <canvas id="chartInitialCost" height="280"></canvas>
-  </section>
-
-  <section class="panel">
-    <h2>個人の残余資金累積＋共通バッファーの資産形成シミュレーション</h2>
-    <p class="hint">「個人残余資金」は手取り給与・ボーナスから共通口座への振込額を引いた金額の累積です。通信費・保険・娯楽費など個人費用は未反映のため、実際の貯蓄額はこれより少なくなります。</p>
-    <canvas id="chartSavings" height="280"></canvas>
   </section>
 
   <section class="panel notes">
-    <h2>前提・ご確認事項</h2>
-    <ul id="notesList"></ul>
+    <button type="button" class="notes-toggle" id="notesToggle" aria-expanded="false">
+      前提・ご確認事項 <span class="chevron">▾</span>
+    </button>
+    <div class="notes-body" id="notesBody">
+      <ul id="notesList"></ul>
+    </div>
   </section>
 
 </main>
+
+<div class="settings-overlay" id="settingsOverlay" aria-hidden="true">
+  <div class="settings-scrim" id="settingsScrim"></div>
+  <div class="settings-panel">
+    <div class="settings-header">
+      <h2>入力設定</h2>
+      <button type="button" id="closeSettingsBtn" class="icon-btn icon-btn-ghost">✕</button>
+    </div>
+    <p class="hint settings-hint">数値を変更すると裏のシミュレーション結果・グラフが自動で更新されます。</p>
+
+    <div class="tabbar settings-tabbar" id="settingsTabs">
+      <button type="button" class="tab active" data-panel="panelIncome">収入</button>
+      <button type="button" class="tab" data-panel="panelHousing">住居・初期費用</button>
+      <button type="button" class="tab" data-panel="panelLiving">生活費</button>
+      <button type="button" class="tab" data-panel="panelSplit">分担方針</button>
+      <button type="button" class="tab" data-panel="panelBuffer">バッファー</button>
+    </div>
+
+    <div class="settings-body">
+
+      <div class="settings-section active" id="panelIncome">
+        <div class="grid grid-2">
+          <label>あなたの手取り月給(円)
+            <input type="number" id="userSalary" value="350000" step="1000">
+          </label>
+          <label>彼女の手取り月給(円)
+            <input type="number" id="partnerSalary" value="260000" step="1000">
+          </label>
+          <label>あなたのボーナス(1回あたり・円)
+            <input type="number" id="userBonus" value="1000000" step="10000">
+          </label>
+          <label>彼女のボーナス(1回あたり・円)
+            <input type="number" id="partnerBonus" value="1000000" step="10000">
+          </label>
+        </div>
+        <p class="hint">ボーナスは毎年6月・12月の年2回支給という前提です。</p>
+      </div>
+
+      <div class="settings-section" id="panelHousing">
+        <div class="grid grid-2">
+          <label>家賃(円/月)
+            <input type="number" id="rent" value="240000" step="1000">
+          </label>
+          <label>家賃補助(円/月・あなたの会社から)
+            <input type="number" id="rentSubsidy" value="60000" step="1000">
+          </label>
+          <label>敷金
+            <input type="number" id="deposit" value="240000" step="1000">
+          </label>
+          <label>礼金
+            <input type="number" id="keyMoney" value="240000" step="1000">
+          </label>
+          <label>初回保証料
+            <input type="number" id="guaranteeFee" value="88400" step="100">
+          </label>
+          <label>火災保険(2年分)
+            <input type="number" id="fireInsurance" value="18000" step="100">
+          </label>
+          <label>鍵交換費
+            <input type="number" id="keyExchange" value="22000" step="100">
+          </label>
+          <label>ハウスクリーニング代
+            <input type="number" id="cleaningFee" value="51480" step="100">
+          </label>
+          <label>エアコン清掃費
+            <input type="number" id="acCleaningFee" value="13200" step="100">
+          </label>
+          <label>仲介手数料(家賃1ヶ月分+税の目安)
+            <input type="number" id="agencyFee" value="264000" step="1000">
+          </label>
+          <label>家具・家電・引っ越し費用
+            <input type="number" id="furnitureMoveCost" value="350000" step="10000">
+          </label>
+        </div>
+        <p class="hint">敷金・礼金等は契約書ベースのご提供値、仲介手数料・家具家電費は目安です。家賃補助を差し引いた額が「共通負担額」として分担対象になります。</p>
+      </div>
+
+      <div class="settings-section" id="panelLiving">
+        <div class="grid grid-2">
+          <label>電気代(基準値・円/月)
+            <input type="number" id="electricityBase" value="9000" step="500">
+          </label>
+          <label>ガス代(基準値・円/月)
+            <input type="number" id="gasBase" value="5500" step="500">
+          </label>
+          <label>水道代(平均・円/月)
+            <input type="number" id="waterBase" value="4500" step="500">
+          </label>
+          <label>食費(2人合計・円/月)
+            <input type="number" id="foodCost" value="60000" step="1000">
+          </label>
+          <label>日用品費(2人合計・円/月)
+            <input type="number" id="dailyNecessities" value="8000" step="500">
+          </label>
+          <label>駐車場代(任意・円/月)
+            <input type="number" id="parkingCost" value="0" step="1000">
+          </label>
+          <label>NHK受信料等その他固定費(任意・円/月)
+            <input type="number" id="nhkFee" value="0" step="500">
+          </label>
+        </div>
+        <p class="hint">インターネット無料の物件を前提に光熱費は季節変動(夏・冬は割高)を加味して計算しています。通信費(携帯)・保険・個人の娯楽費等は対象外(各自管理)です。</p>
+      </div>
+
+      <div class="settings-section" id="panelSplit">
+        <div class="split-options">
+          <label class="radio"><input type="radio" name="splitMode" value="even" checked> 完全折半(50:50)</label>
+          <label class="radio"><input type="radio" name="splitMode" value="income"> 手取り給与比率で分担</label>
+          <label class="radio"><input type="radio" name="splitMode" value="custom"> カスタム比率</label>
+        </div>
+        <label class="slider-label">あなたの負担割合: <span id="customRatioLabel">55%</span>
+          <input type="range" id="customRatio" min="50" max="80" value="55" step="1">
+        </label>
+        <p class="hint" id="ratioResultText"></p>
+      </div>
+
+      <div class="settings-section" id="panelBuffer">
+        <label class="slider-label">最低バッファー(共通生活費の何ヶ月分を口座に残すか): <span id="bufferLabel">1.0ヶ月分</span>
+          <input type="range" id="bufferTargetMonths" min="0" max="3" value="1" step="0.5">
+        </label>
+        <label>ボーナス時(12月・翌年6月以降)の追加積立額(任意・1回あたり・2人合計の円)
+          <input type="number" id="extraBonusContribution" value="0" step="10000">
+        </label>
+        <p class="hint">2026年6月のボーナスは初期費用＋バッファー分の拠出に自動的に逆算され、それ以外のボーナス時は任意で追加積立できます(将来の旅行・結婚資金等に)。</p>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <script src="vendor/chart.umd.min.js"></script>
 <script src="app.js"></script>
