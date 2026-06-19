@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>収入設定｜同棲家計シミュレーター</title>
+
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          rounded: ['"M PLUS Rounded 1c"', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            50: '#fff7f2',
+            100: '#ffe9dd',
+            400: '#ff9466',
+            500: '#ff7a40',
+            600: '#f0612a',
+          },
+          mint: {
+            100: '#e3fbf2',
+            400: '#3ec6a3',
+            500: '#2bb190',
+          },
+        },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+  body { font-family: 'M PLUS Rounded 1c', sans-serif; }
+</style>
+</head>
+<body class="bg-orange-50 text-gray-700 min-h-screen pb-16">
+
+  <!-- ヘッダー -->
+  <header class="bg-white/80 backdrop-blur sticky top-0 z-10 border-b border-orange-100">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🏠</span>
+        <div>
+          <h1 class="text-lg font-bold text-gray-800">同棲家計シミュレーター</h1>
+          <p class="text-xs text-gray-400">収入設定</p>
+        </div>
+      </div>
+      <div class="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">
+        2人
+      </div>
+    </div>
+
+    <!-- ナビ（表示のみ／非機能） -->
+    <nav class="max-w-5xl mx-auto px-4 pb-3 flex gap-2 overflow-x-auto text-sm">
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">ダッシュボード</span>
+      <span class="px-3 py-1.5 rounded-full bg-brand-500 text-white whitespace-nowrap shadow-sm">収入設定</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">初期費用</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">月額費用</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">負担割合</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">家計簿</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">分析</span>
+    </nav>
+  </header>
+
+  <main class="max-w-md mx-auto px-4 mt-8">
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-orange-100">
+      <h2 class="text-base font-bold text-gray-800 mb-1">収入を入力してください</h2>
+      <p class="text-xs text-gray-400 mb-5">入力した内容はこの端末に保存され、次回も表示されます。</p>
+
+      <form id="incomeForm" class="space-y-5">
+
+        <div>
+          <label for="baseSalary" class="block text-sm font-bold text-gray-600 mb-1">額面月給</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">¥</span>
+            <input
+              type="number"
+              id="baseSalary"
+              inputmode="numeric"
+              min="0"
+              step="1000"
+              placeholder="300000"
+              class="w-full pl-7 pr-3 py-2.5 rounded-xl border border-orange-200 focus:outline-none focus:ring-2 focus:ring-brand-400 text-right"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label for="bonus" class="block text-sm font-bold text-gray-600 mb-1">ボーナス（年間）</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">¥</span>
+            <input
+              type="number"
+              id="bonus"
+              inputmode="numeric"
+              min="0"
+              step="1000"
+              placeholder="600000"
+              class="w-full pl-7 pr-3 py-2.5 rounded-xl border border-orange-200 focus:outline-none focus:ring-2 focus:ring-brand-400 text-right"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label for="housingAllowance" class="block text-sm font-bold text-gray-600 mb-1">家賃補助（月額）</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">¥</span>
+            <input
+              type="number"
+              id="housingAllowance"
+              inputmode="numeric"
+              min="0"
+              step="1000"
+              placeholder="20000"
+              class="w-full pl-7 pr-3 py-2.5 rounded-xl border border-orange-200 focus:outline-none focus:ring-2 focus:ring-brand-400 text-right"
+            >
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold shadow-sm transition-colors"
+        >
+          保存する
+        </button>
+
+        <p id="savedMessage" class="text-center text-sm text-mint-500 font-bold opacity-0 transition-opacity">
+          保存しました
+        </p>
+
+      </form>
+    </div>
+
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'oto_income_settings';
+
+    const fields = {
+      baseSalary: document.getElementById('baseSalary'),
+      bonus: document.getElementById('bonus'),
+      housingAllowance: document.getElementById('housingAllowance'),
+    };
+    const savedMessage = document.getElementById('savedMessage');
+
+    function loadSettings() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        Object.keys(fields).forEach((key) => {
+          if (data[key] !== undefined && data[key] !== null) {
+            fields[key].value = data[key];
+          }
+        });
+      } catch (e) {
+        console.error('設定の読み込みに失敗しました', e);
+      }
+    }
+
+    function saveSettings() {
+      const data = {
+        baseSalary: Number(fields.baseSalary.value) || 0,
+        bonus: Number(fields.bonus.value) || 0,
+        housingAllowance: Number(fields.housingAllowance.value) || 0,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    document.getElementById('incomeForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      saveSettings();
+      savedMessage.style.opacity = '1';
+      setTimeout(() => { savedMessage.style.opacity = '0'; }, 2000);
+    });
+
+    loadSettings();
+  </script>
+
+</body>
+</html>
