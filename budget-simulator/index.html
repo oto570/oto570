@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ダッシュボード｜同棲家計シミュレーター</title>
+
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          rounded: ['"M PLUS Rounded 1c"', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            50: '#fff7f2',
+            100: '#ffe9dd',
+            400: '#ff9466',
+            500: '#ff7a40',
+            600: '#f0612a',
+          },
+          mint: {
+            100: '#e3fbf2',
+            400: '#3ec6a3',
+            500: '#2bb190',
+          },
+        },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<!-- Chart.js (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+<style>
+  body { font-family: 'M PLUS Rounded 1c', sans-serif; }
+</style>
+</head>
+<body class="bg-orange-50 text-gray-700 min-h-screen pb-16">
+
+  <!-- ヘッダー -->
+  <header class="bg-white/80 backdrop-blur sticky top-0 z-10 border-b border-orange-100">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🏠</span>
+        <div>
+          <h1 class="text-lg font-bold text-gray-800">同棲家計シミュレーター</h1>
+          <p class="text-xs text-gray-400">2026年6月のレポート</p>
+        </div>
+      </div>
+      <div class="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-sm">
+        2人
+      </div>
+    </div>
+
+    <!-- ナビ（表示のみ／非機能） -->
+    <nav class="max-w-5xl mx-auto px-4 pb-3 flex gap-2 overflow-x-auto text-sm">
+      <span class="px-3 py-1.5 rounded-full bg-brand-500 text-white whitespace-nowrap shadow-sm">ダッシュボード</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">収入設定</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">初期費用</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">月額費用</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">負担割合</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">家計簿</span>
+      <span class="px-3 py-1.5 rounded-full bg-white text-gray-500 whitespace-nowrap">分析</span>
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 mt-6 space-y-8">
+
+    <!-- サマリーカード -->
+    <section>
+      <h2 class="text-sm font-bold text-gray-500 mb-3 px-1">今月のすがた</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-xs text-gray-400">世帯手取り（月）</p>
+          <p class="text-xl font-bold text-gray-800 mt-1">¥620,000</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-xs text-gray-400">月間予測支出</p>
+          <p class="text-xl font-bold text-gray-800 mt-1">¥280,000</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-xs text-gray-400">月間実績支出</p>
+          <p class="text-xl font-bold text-brand-600 mt-1">¥265,000</p>
+          <p class="text-[11px] text-mint-500 mt-0.5">予測より ¥15,000 おさえられました</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-xs text-gray-400">月間予測貯蓄</p>
+          <p class="text-xl font-bold text-gray-800 mt-1">¥340,000</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-xs text-gray-400">月間実績貯蓄</p>
+          <p class="text-xl font-bold text-mint-500 mt-1">¥355,000</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-xs text-gray-400">初期費用目標額</p>
+          <p class="text-xl font-bold text-gray-800 mt-1">¥600,000</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100 col-span-2 sm:col-span-1">
+          <p class="text-xs text-gray-400">現在貯蓄額</p>
+          <p class="text-xl font-bold text-gray-800 mt-1">¥420,000</p>
+          <div class="w-full h-2 bg-orange-100 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-brand-400 rounded-full" style="width:70%"></div>
+          </div>
+          <p class="text-[11px] text-gray-400 mt-1">目標の 70%</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- グラフ -->
+    <section class="space-y-4">
+      <h2 class="text-sm font-bold text-gray-500 px-1">グラフで見る</h2>
+
+      <div class="grid lg:grid-cols-2 gap-4">
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-sm font-bold text-gray-700 mb-2">予測 vs 実績</p>
+          <canvas id="chartForecastActual" height="220"></canvas>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100">
+          <p class="text-sm font-bold text-gray-700 mb-2">支出内訳</p>
+          <canvas id="chartBreakdown" height="220"></canvas>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100 lg:col-span-2">
+          <p class="text-sm font-bold text-gray-700 mb-2">貯蓄の推移</p>
+          <canvas id="chartSavings" height="180"></canvas>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const fontFamily = "'M PLUS Rounded 1c', sans-serif";
+    Chart.defaults.font.family = fontFamily;
+    Chart.defaults.color = '#6b7280';
+
+    // 予測 vs 実績
+    new Chart(document.getElementById('chartForecastActual'), {
+      type: 'bar',
+      data: {
+        labels: ['支出', '貯蓄'],
+        datasets: [
+          { label: '予測', data: [280000, 340000], backgroundColor: '#ffd9c2', borderRadius: 8 },
+          { label: '実績', data: [265000, 355000], backgroundColor: '#ff7a40', borderRadius: 8 },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { ticks: { callback: (v) => '¥' + v.toLocaleString() } } },
+      },
+    });
+
+    // 支出内訳
+    new Chart(document.getElementById('chartBreakdown'), {
+      type: 'doughnut',
+      data: {
+        labels: ['家賃', '食費', '光熱費', '通信費', '日用品', 'その他'],
+        datasets: [{
+          data: [120000, 60000, 25000, 15000, 20000, 25000],
+          backgroundColor: ['#ff7a40', '#ffb38a', '#3ec6a3', '#8ad8c2', '#ffd166', '#d9d9d9'],
+          borderWidth: 0,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } } },
+      },
+    });
+
+    // 貯蓄の推移
+    new Chart(document.getElementById('chartSavings'), {
+      type: 'line',
+      data: {
+        labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+        datasets: [{
+          label: '貯蓄額',
+          data: [120000, 175000, 230000, 290000, 360000, 420000],
+          borderColor: '#2bb190',
+          backgroundColor: 'rgba(62,198,163,0.15)',
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#2bb190',
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { ticks: { callback: (v) => '¥' + v.toLocaleString() } } },
+      },
+    });
+  </script>
+
+</body>
+</html>
